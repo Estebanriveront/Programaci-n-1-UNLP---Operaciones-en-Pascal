@@ -1,0 +1,119 @@
+Estos al parecer fueron verificados en su momento, tenía un txt donde tenía
+todas estas utilidades, al parecer no terminé de hacer el "agregar ordenadamente".
+Otra cosa que estaría faltando es al menos un método de ordenación de vectores,
+aunque a pesar de que se vió en la teoría, creo que no pregunta nada sobre
+ordenación de vectores normalmente. NORMALMENTE
+
+-----------------------------------------------------------
+AgregarGeneral (tiene en cuenta todos los casos), tira el
+dato ingresado más lejano DE MANERA CORRECTA.
+
+procedure Agregar(var V:TVector; var dimL:integer; dato:integer);
+var
+  i:integer;
+begin
+  i:=1;
+  if dimL<DIMF then begin
+    dimL:=dimL+1;
+    V[dimL]:=dato
+  end
+  else
+  begin
+    for i:=1 to DIMF-1 do
+      V[i]:=V[i+1];
+    V[dimL]:=dato;
+  end;
+end;   
+
+-----------------------------------------------------------     
+
+Este procedimiento elimina un valor UNA SOLA VEZ.
+
+procedure EliminarUnValor(var V:TVector; var dimL:integer; dato:integer);
+var
+   i,k:integer; bool:boolean;
+begin
+     i:=1; bool:=false;
+     while ((i<=dimL)and(bool=false)) do begin
+           if V[i]=dato then begin
+              bool:=true;
+              for k:=i to dimL-1 do
+                  V[k]:=V[k+1];
+              V[dimL]:=0; {Borra la información previamente contenida}
+              dimL:=dimL-1;
+           end
+           else
+               i:=i+1;
+     end;
+end;      
+
+--------------------------------------------------------------
+
+AgregarOrdenadamente: AÚN NO ESTÁ TERMINADO, QUEDA PARA CONSULTA O
+PARA CONTINUAR LUEGO.
+
+procedure AgregarOrdenadamente(var V:TVector; var dimL:integer; dato:integer);
+var
+  i,k:integer;
+  bool:boolean;
+begin
+     bool:=false;
+     if dimL = 0 then begin
+        dimL:=dimL+1;
+        V[dimL]:=dato;
+     end
+     else
+     begin
+          if dimL<DIMF then begin {Si el vector está lleno no agrega nada}
+              k:=1;
+              while ((bool=false)and(k<=dimL)) do begin
+                  if V[i]=dato then
+                       bool:=true
+                  else
+                      k:=k+1;
+              end;
+              for i:=dimL-1 downto k do {Tal vez en verdad sea i:=dimL-1}
+                  V[i+1]:=V[i];
+              dimL:=dimL+1;
+              V[k]:=dato;
+          end;
+
+     end;
+end;   
+
+--------------------------------------------------------------
+
+procedure BusquedaNormal(v:TVector; dimL:integer; var bool:boolean; var i:integer);
+begin
+    bool:=false; i:=1;
+    while (bool=false)and(i<=dimL) do begin
+        if v[i]=7 then
+            bool:=true
+        else
+            i:=i+1;
+    end;
+end;
+
+--------------------------------------------------------------
+
+procedure BusquedaDicotomica(v:TVector; numeroBuscado:integer; dimL:integer; var bool:boolean; var i:integer);
+var
+    ini,fin,med:integer;
+begin
+    bool:=false; ini:=1; fin:=dimL;
+    while (bool=false)and(ini<fin) do begin
+      med:=(ini+fin) div 2;
+      writeln('Esta buscando dictomicamente');
+      if v[med]=numeroBuscado then begin
+          i:=med;
+          bool:=true
+      end
+      else
+          begin
+              if (numeroBuscado>v[med]) then
+                  ini:=med+1
+              else
+                  fin:=med-1;
+          end;
+    end;
+end;  
