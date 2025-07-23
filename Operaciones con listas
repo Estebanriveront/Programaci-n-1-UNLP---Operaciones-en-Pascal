@@ -1,0 +1,135 @@
+{Lo único que falta en este compendio de operaciones con listas
+ es el merge de listas, sin embargo, es algo que se puede conseguir
+ tranquilamente en las diapositivas de los profesores titulares,
+ como ya no me queda tiempo, no la voy a escribir ni testear,
+ si me lo piden creo que lo haré.}
+
+type
+    TLista=^TNodo;
+    TDatos = record
+        dato1:integer;
+        dato2:real;
+    end;
+
+    TNodo = record
+        datos:TDatos;
+        sig:TLista;
+    end;
+
+{Todos los agregar funcionan perfectamente, han sido testeados,
+ lo que no se testeó es el GenerarListaOrdenada.}
+procedure AgregarNodoNormal(var lis:TLista; datos:TDatos);
+var
+    nue:TLista;
+begin
+    new(nue);
+    nue^.datos:=datos;
+    nue^.sig:=lis;
+    lis:=nue;
+end;
+procedure AgregarNodoAlFinal(var lis:TLista; datos:TDatos);
+var
+    act,nue:TLista;
+begin
+    new(nue);
+    nue^.datos:=datos;
+    nue^.sig:=nil;
+    if lis=nil then
+        lis:=nue
+    else begin {No está vacía}
+        act:=lis;
+        while act^.sig<>nil do begin
+            act:=act^.sig;
+        end;
+        act^.sig:=nue;
+    end;
+end;
+procedure AgregarNodoOrdenadamente(var lis:TLista; datos:TDatos);
+{NOTA: la condición del while ">" ó "<" dependerá de si se quiere
+ agregar el nodo de manera ascendente o descendente.}
+var
+    ant,act,nue:TLista;
+begin
+    new(nue);
+    nue^.datos:=datos;
+    ant:=lis; act:=lis;
+    while (act<>nil) and (datos.dato1>act^.datos.dato1) do begin
+        ant:=act;
+        act:=act^.sig;
+    end;
+    if ant=act then
+        lis:=nue
+    else
+        ant^.sig:=nue;
+    nue^.sig:=act;
+end;
+procedure GenerarListaOrdenada(var lis:TLista);
+{Este procedimiento se puede crear con lo dado arriba, pero
+decido escribirlo porque es bastante normal que lo pidan}
+var
+    datos:TDatos;
+begin
+    with datos do begin
+        readln(dato1);
+        readln(dato2);
+        while dato1<>0 do begin
+            AgregarNodoOrdenadamente(lis,datos);
+            readln(dato1);
+            readln(dato2);
+        end;
+    end;
+    {Nota: obviamente se puede hacer un módulo "Leer" para no tener que
+    hacer "readln(datoX)" todo el rato}
+end;
+
+
+
+
+
+{Nota: Los siguientes 3 módulos (eliminar) han sido probados y funcionan
+perfectamente.}
+procedure EliminarNodo(var lis,act,ant:TLista);
+var
+    aux:TLista;
+begin
+    aux:=act;
+    if act=lis then
+        lis:=act^.sig
+    else
+        ant^.sig:=act^.sig;
+    act:=act^.sig;
+    dispose(aux);
+end;
+procedure EliminarNodos(var lis:TLista; dato:integer);
+var
+    ant,act:TLista;
+begin
+    act:=lis; ant:=lis;
+    while act<>nil do begin
+        if act^.datos.dato1=dato then
+            EliminarNodo(lis,act,ant)
+        else begin
+            ant:=act;
+            act:=act^.sig;
+        end;
+    end;
+end;
+procedure EliminarUnSoloNodo(var lis:TLista; dato:integer);
+{Igual al eliminar nodos, solo que cuando elimina un solo
+ nodo... Deja de eliminar los demás nodos haciendo provecho
+ de un booleano.}
+var
+     ant,act:TLista; bool:boolean;
+begin
+    act:=lis; ant:=lis; bool:=false;
+    while ((act<>nil)and(bool=false)) do begin
+        if act^.datos.dato1=dato then begin
+            EliminarNodo(lis,act,ant);
+            bool:=true;
+        end
+        else begin
+            ant:=act;
+            act:=act^.sig;
+          end;
+      end;
+  end;   
