@@ -1,4 +1,4 @@
-# Programacion-1-UNLP---Operaciones-en-Pascal
+# Programacion-I-UNLP-Operaciones-en-Pascal
 La idea de este repositorio es tener las principales operaciones bien escritas acorde al tipo de dato, especialmente listas y vectores.
 
 Siempre que se trate de resolver todo tipo de ejercicios con vectores o listas 
